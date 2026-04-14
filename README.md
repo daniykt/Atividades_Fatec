@@ -70,23 +70,24 @@ Acesse em: `http://localhost:5173`
 Para evitar poluição visual, a lista de alunos possui **scroll automático**. Quando o conteúdo ultrapassa o limite de altura definido, uma barra de rolagem aparece automaticamente — mantendo a interface limpa e organizada.
 
 ```jsx
-        <ul className="scroll"> 
-          {alunos.map((aluno, index) => (
-            <li key={index}>
-              {aluno.nome} — {aluno.curso}
-            </li>
-          ))}
-        </ul>
+<ul className="scroll">
+  {alunos.map((aluno, index) => (
+    <li key={index}>
+      {aluno.nome} — {aluno.curso}
+    </li>
+  ))}
+</ul>
 ```
 
-````css
-        .scroll {
-            max-height: 100px;
-            overflow-y: auto; 
-        }
+```css
+.scroll {
+  max-height: 100px;
+  overflow-y: auto;
+}
 ```
+
 - `max-height` — define o limite antes do scroll aparecer
-- `overflow-Y: auto` — scroll aparece só quando necessário
+- `overflow-y: auto` — scroll aparece só quando necessário
 
 ---
 
