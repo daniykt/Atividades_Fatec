@@ -1,5 +1,5 @@
-name: app_catalogo_mobile
-description: Aplicativo de catálogo de produtos — atividade prática integrada (aulas 1-4).
+name: app_cartao_perfil
+description: Desafio do Arquiteto — cartão de perfil em Flutter (Aula 5).
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -13,8 +13,6 @@ dependencies:
   cupertino_icons: ^1.0.6
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^3.0.0
 
 flutter:

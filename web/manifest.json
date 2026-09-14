@@ -1,6 +1,6 @@
 {
-    "name": "app_catalogo_mobile",
-    "short_name": "app_catalogo_mobile",
+    "name": "app_cartao_perfil",
+    "short_name": "app_cartao_perfil",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
