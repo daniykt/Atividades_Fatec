@@ -1,136 +1,125 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const AppCartaoPerfil());
+  runApp(const AppContador());
 }
 
-class AppCartaoPerfil extends StatelessWidget {
-  const AppCartaoPerfil({super.key});
+class AppContador extends StatelessWidget {
+  const AppContador({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cartão de Perfil',
+      title: 'Contador',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.cyan,
-          brightness: Brightness.dark,
-        ),
-        scaffoldBackgroundColor: Colors.black,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
       ),
-      home: const PerfilPage(),
+      home: const ContadorPage(),
     );
   }
 }
 
-class PerfilPage extends StatelessWidget {
-  const PerfilPage({super.key});
+class ContadorPage extends StatefulWidget {
+  const ContadorPage({super.key});
+
+  @override
+  State<ContadorPage> createState() => _ContadorPageState();
+}
+
+class _ContadorPageState extends State<ContadorPage> {
+  int _contador = 0;
+
+  // Limite máximo do contador (Nível 3 — trava de segurança).
+  static const int _limite = 10;
+
+  void _incrementar() {
+    setState(() {
+      _contador++;
+    });
+  }
+
+  void _resetar() {
+    setState(() {
+      _contador = 0;
+    });
+  }
+
+  /// NÍVEL 2 — Cor dinâmica: pares em azul, ímpares em vermelho.
+  Color get _corDoNumero {
+    if (_contador == 0) return Colors.black87;
+    return _contador.isEven ? Colors.blue.shade700 : Colors.red.shade700;
+  }
+
+  /// NÍVEL 3 — Trava de segurança: quando bate no limite,
+  /// o FAB recebe `null` em `onPressed`, o que o desabilita visualmente.
+  bool get _atingiuLimite => _contador >= _limite;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Desafio do Arquiteto'),
+        title: const Text('Contador'),
         centerTitle: true,
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: SingleChildScrollView(
-        // NÍVEL EVOLUÇÃO: Column externa envelopando os dois cartões,
-        // com SizedBox para separá-los verticalmente.
+      body: Center(
         child: Column(
-          children: const [
-            SizedBox(height: 16),
-            CartaoPerfil(
-              nome: 'Danilo Silva',
-              titulo: 'Desenvolvedor Flutter',
-              descricao:
-                  'Estudante de DSM na FATEC Matão, apaixonado por front-end e desenvolvimento mobile.',
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Você pressionou o botão:',
+              style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 8),
-            // NÍVEL MESTRE: subtítulo gigante que provocaria Overflow no Row,
-            // resolvido com Expanded envolvendo a Column dos textos.
-            CartaoPerfil(
-              nome: 'Ana Pereira',
-              titulo:
-                  'Desenvolvedora Full-Stack Sênior Especialista em Arquitetura de Microsserviços na Nuvem',
-              descricao:
-                  'Atua há mais de 10 anos com sistemas distribuídos e mentoria de times de engenharia.',
+            const SizedBox(height: 16),
+            // O Display: Text com TextStyle, cor calculada dinamicamente.
+            Text(
+              '$_contador',
+              style: TextStyle(
+                fontSize: 96,
+                fontWeight: FontWeight.bold,
+                color: _corDoNumero,
+              ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            Text(
+              _contador == 0
+                  ? 'Toque no + para começar'
+                  : _atingiuLimite
+                      ? 'Limite máximo atingido!'
+                      : _contador.isEven
+                          ? 'Número par'
+                          : 'Número ímpar',
+              style: TextStyle(
+                fontSize: 16,
+                color: _atingiuLimite ? Colors.red.shade700 : Colors.grey,
+                fontWeight:
+                    _atingiuLimite ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            const SizedBox(height: 32),
+            // NÍVEL 1 — OutlinedButton de Reset dentro da Column.
+            OutlinedButton.icon(
+              onPressed: _resetar,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Reset'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Cartão de perfil reutilizável — implementa o layout do slide 13
-/// (Container → Row → Icon + Column com Nome/Título/Descrição).
-class CartaoPerfil extends StatelessWidget {
-  final String nome;
-  final String titulo;
-  final String descricao;
-
-  const CartaoPerfil({
-    super.key,
-    required this.nome,
-    required this.titulo,
-    required this.descricao,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // PASSO 1 — A Fundação: Container com margin, padding, cor e borderRadius.
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.blueGrey[900],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      // PASSO 2 — O Esqueleto: Row com Icon + SizedBox + Column dos textos.
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // PASSO 3 — Acabamentos: Icon injetando cor e vida.
-          const Icon(Icons.person, size: 48, color: Colors.cyan),
-          const SizedBox(width: 16),
-          // NÍVEL MESTRE: Expanded resolve o Overflow quando o texto é longo.
-          // Sem ele, um subtítulo gigante estoura a largura do Row.
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  nome,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  titulo,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  descricao,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      // NÍVEL 3 — onPressed recebe `null` quando o limite é atingido,
+      // desabilitando o FAB visualmente (fica acinzentado).
+      floatingActionButton: FloatingActionButton(
+        onPressed: _atingiuLimite ? null : _incrementar,
+        tooltip: 'Incrementar',
+        child: const Icon(Icons.add),
       ),
     );
   }

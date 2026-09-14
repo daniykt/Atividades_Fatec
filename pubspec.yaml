@@ -1,5 +1,5 @@
-name: app_cartao_perfil
-description: Desafio do Arquiteto — cartão de perfil em Flutter (Aula 5).
+name: app_contador
+description: Desafios de Laboratório — App Contador (Aula 6).
 publish_to: 'none'
 version: 1.0.0+1
 

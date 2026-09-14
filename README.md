@@ -1,52 +1,77 @@
-# app_cartao_perfil
+# app_contador
 
-Atividade prática da **Aula 5 — Do Código à Tela com Flutter** da disciplina Programação para Dispositivos Móveis I (ILP038), cursada no 4º semestre do curso de Desenvolvimento de Software Multiplataforma na FATEC Matão.
+Atividade prática da **Aula 6 — Interface e Interação: Dando Vida ao Flutter** da disciplina Programação para Dispositivos Móveis I (ILP038), cursada no 4º semestre do curso de Desenvolvimento de Software Multiplataforma na FATEC Matão.
 
 **Aluno:** Danilo
 **Professor:** Diego Menegassi
 
 ---
 
-## O Desafio do Arquiteto
+## Desafios de Laboratório
 
-Reproduzir um **cartão de perfil** aplicando as leis espaciais do Flutter (`Container`, `Row`, `Column`, `SizedBox`, `Icon`, `Text`) e completar os três níveis do desafio proposto no slide "Seu Turno: O Desafio do Arquiteto".
+Partindo do App Contador base — construído em aula com `Scaffold`, `AppBar`, `Center`, `Column`, `Text`, `FloatingActionButton` e `setState()` — foram implementados os três desafios propostos no slide "Desafios de Laboratório (Mão na Massa)".
 
-### Nível Base — Reprodução do cartão
+### Nível 1 — Básico: Botão de Reset
 
-Estrutura em camadas conforme o modelo apresentado em aula:
+Adicionado um `OutlinedButton.icon` dentro da `Column` central com ícone `Icons.refresh` e label "Reset". Ao ser pressionado, ele chama o método `_resetar()`, que força a variável de estado `_contador` a voltar a zero:
 
-- **Container** com `margin: EdgeInsets.all(16)`, `padding: EdgeInsets.all(24)`, fundo `Colors.blueGrey[900]` e `borderRadius: BorderRadius.circular(16)`.
-- **Row** enfileira o ícone e a coluna de textos, com `SizedBox(width: 16)` entre eles.
-- **Column** empilha `Nome`, `Título Profissional` e `Descrição`.
-- **Icon** `Icons.person` cyan, `size: 48`.
-- Tipografia: nome em branco, negrito, 20pt; título em cinza; descrição em branco suave.
+```dart
+void _resetar() {
+  setState(() {
+    _contador = 0;
+  });
+}
+```
 
-### Nível Evolução — Segundo cartão
+### Nível 2 — Intermediário: Cor dinâmica por paridade
 
-Um segundo cartão foi adicionado abaixo do primeiro. Ambos ficam encapsulados em uma `Column` externa dentro de um `SingleChildScrollView`, com `SizedBox` verticais para separação — exatamente como a dica do slide sugere.
+A propriedade `color` do `TextStyle` do número principal é calculada dinamicamente por um getter:
 
-### Nível Mestre — Provocando e resolvendo o Overflow
+```dart
+Color get _corDoNumero {
+  if (_contador == 0) return Colors.black87;
+  return _contador.isEven ? Colors.blue.shade700 : Colors.red.shade700;
+}
+```
 
-O segundo cartão usa **intencionalmente** um título profissional gigantesco:
+Assim, números pares aparecem em tons de azul e ímpares em vermelho, atualizando a cada `setState()` disparado pelo FAB ou pelo botão de reset.
 
-> "Desenvolvedora Full-Stack Sênior Especialista em Arquitetura de Microsserviços na Nuvem"
+### Nível 3 — Avançado: Trava de segurança no limite
 
-Sem tratamento, esse texto estouraria a largura do `Row` e o Flutter mostraria a listra amarela e preta de *Overflow*. A resolução foi envolver a `Column` interna em um widget **`Expanded`**, que instrui o Flutter a ocupar o espaço horizontal restante e quebrar o texto em várias linhas automaticamente.
+A matemática do contador não pode passar de 10. Foi criado um getter `_atingiuLimite` que retorna `true` quando `_contador >= 10`, e o FAB usa essa informação para **passar `null` em `onPressed`**, o que desabilita o botão visualmente (fica acinzentado e não responde ao toque):
+
+```dart
+floatingActionButton: FloatingActionButton(
+  onPressed: _atingiuLimite ? null : _incrementar,
+  child: const Icon(Icons.add),
+),
+```
+
+Um texto de aviso "Limite máximo atingido!" também aparece em vermelho quando a trava é acionada, dando feedback visual claro ao usuário. O botão de Reset continua ativo, permitindo destravar o FAB voltando o contador a zero.
 
 ---
 
 ## Estrutura do projeto
 
 ```
-app_cartao_perfil/
+app_contador/
 ├── lib/
-│   └── main.dart          # AppCartaoPerfil + PerfilPage + CartaoPerfil
+│   └── main.dart          # AppContador + ContadorPage (StatefulWidget)
 ├── screenshots/           # Capturas de tela do app em execução
 ├── pubspec.yaml
 └── README.md
 ```
 
-O widget `CartaoPerfil` foi extraído como componente reutilizável, recebendo `nome`, `titulo` e `descricao` como parâmetros nomeados obrigatórios — reforçando os conceitos de imutabilidade e null safety trabalhados na Aula 4.
+---
+
+## Conceitos aplicados
+
+- **StatefulWidget** e ciclo de vida com `createState()`.
+- **setState()** para notificar o Flutter de mudanças no estado interno.
+- **Widgets estruturais:** `Scaffold`, `AppBar`, `Center`, `Column`, `SizedBox`.
+- **Widgets visuais:** `Text` com `TextStyle` dinâmico, `Icon`, `OutlinedButton`, `FloatingActionButton`.
+- **Material Design 3** com `ColorScheme.fromSeed`.
+- **Lógica condicional na UI** — cores, mensagens e estado ativo/inativo do FAB derivados do valor do contador.
 
 ---
 

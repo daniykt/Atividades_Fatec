@@ -1,4 +1,4 @@
-package com.example.app_cartao_perfil
+package com.example.app_contador
 
 import io.flutter.embedding.android.FlutterActivity
 

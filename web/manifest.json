@@ -1,6 +1,6 @@
 {
-    "name": "app_cartao_perfil",
-    "short_name": "app_cartao_perfil",
+    "name": "app_contador",
+    "short_name": "app_contador",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
