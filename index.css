@@ -1,0 +1,109 @@
+/* Configurações básicas para zerar margens e definir a fonte */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Centraliza o card no meio da tela com um fundo suave */
+body {
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Estilo da caixa/card principal */
+.card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Estilização do título e da linha divisória */
+h1 {
+    color: #333;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Espaçamento dos parágrafos do formulário */
+form p {
+    margin-bottom: 15px;
+}
+
+/* Estilo dos textos dos rótulos (labels) */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Estilo dos campos de texto/número */
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Efeito ao clicar/focar no input */
+input[type="number"]:focus {
+    border-color: #007bff;
+}
+
+/* Estilo padrão para os botões */
+input[type="submit"],
+input[type="reset"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+/* Estilo do botão "Calcular" */
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo do botão "Limpar" */
+input[type="reset"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+input[type="reset"]:hover {
+    background-color: #5a6268;
+}
+
+/* Pequeno efeito ao clicar nos botões */
+input[type="submit"]:active,
+input[type="reset"]:active {
+    transform: scale(0.98);
+}
