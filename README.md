@@ -25,9 +25,12 @@ flutter run
 
 ## Evidências
 
-Prints da execução na pasta raiz do repositório:
+### TelaContador — alteração de quantidade
 
-- `print1.png` — alteração de quantidade na `TelaContador`.
-- `print2.png` — `TelaResumo` exibindo os dados recebidos.
+![TelaContador com quantidade alterada](print1.png)
+
+### TelaResumo — dados recebidos
+
+![TelaResumo exibindo item, quantidade e total](print2.png)
 
 O histórico de commits semânticos pode ser conferido diretamente no GitHub.
