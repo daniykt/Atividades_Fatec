@@ -1,0 +1,62 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #e8f5ee;
+    padding: 16px;
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+}
+
+h1 { margin: 0; color: #1b7f4b; font-size: 1.5rem; }
+.sub { margin: 4px 0 20px; color: #666; }
+
+label { display: block; margin: 14px 0 6px; font-weight: bold; font-size: .9rem; }
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.check { display: flex; align-items: center; gap: 8px; font-weight: normal; }
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #1b7f4b;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+button:hover { background: #146339; }
+
+.resultado {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f3faf6;
+    border-left: 4px solid #1b7f4b;
+    border-radius: 6px;
+}
+.resultado h2 { margin: 0 0 10px; font-size: 1.1rem; }
+.resultado p { margin: 6px 0; }
+.final { font-size: 1.2rem; font-weight: bold; color: #1b7f4b; }
