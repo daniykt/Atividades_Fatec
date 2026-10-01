@@ -11,6 +11,12 @@ Calcula quanto o cliente vai pagar na farmácia. Você informa o nome, o valor d
 - 70 anos ou mais: 7% de desconto
 - cartão fidelidade: mais 5%
 
+### 🗓️ Atividade: Simulação de Parcelamento (01/10/2026)
+Feita na pasta `farmacia_paracetaloka`. Depois de calcular o total com desconto, o site mostra o valor dividido de **1x a 6x**.
+- O cálculo foi feito de duas formas, uma com `for` e outra com `while` (no arquivo `calculo.php`).
+- As duas versões aparecem lado a lado numa tabela, para comparar.
+- Também foi adicionado um botão **Limpar**, que apaga o formulário e o resultado.
+
 ## 📁 tabuada
 Você digita um número e o site mostra a tabuada dele, de 0 a 9, com um visual de gatinhos 🐱.
 
