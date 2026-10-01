@@ -20,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fidelidade = isset($_POST['fidelidade']);
 
     $resultado = calcularPedido($total, $faixa, $fidelidade);
+    $parcelasFor = parcelarComFor($resultado['final']);
+    $parcelasWhile = parcelarComWhile($resultado['final']);
 }
 
 function brl(float $v): string
@@ -36,45 +38,72 @@ function brl(float $v): string
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="card">
-        <h1>Farmácia Parecetaloka</h1>
-        <p class="sub">Cálculo do total do pedido</p>
+    <main class="layout">
+        <section class="card">
+            <h1>Farmácia Parecetaloka</h1>
+            <p class="sub">Cálculo do total do pedido</p>
 
-        <form method="post">
-            <label for="nome">Nome do cliente</label>
-            <input type="text" id="nome" name="nome" required
-                   value="<?= htmlspecialchars($nome) ?>">
+            <form method="post">
+                <label for="nome">Nome do cliente</label>
+                <input type="text" id="nome" name="nome" required
+                       value="<?= htmlspecialchars($nome) ?>">
 
-            <label for="total">Total do pedido (R$)</label>
-            <input type="number" id="total" name="total" step="0.01" min="0" required
-                   value="<?= htmlspecialchars((string) $total) ?>">
+                <label for="total">Total do pedido (R$)</label>
+                <input type="number" id="total" name="total" step="0.01" min="0" required
+                       value="<?= htmlspecialchars((string) $total) ?>">
 
-            <label for="faixa">Faixa etária</label>
-            <select id="faixa" name="faixa">
-                <?php foreach ($nomes as $valor => $texto): ?>
-                    <option value="<?= $valor ?>" <?= $faixa === $valor ? 'selected' : '' ?>>
-                        <?= $texto ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+                <label for="faixa">Faixa etária</label>
+                <select id="faixa" name="faixa">
+                    <?php foreach ($nomes as $valor => $texto): ?>
+                        <option value="<?= $valor ?>" <?= $faixa === $valor ? 'selected' : '' ?>>
+                            <?= $texto ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
 
-            <label class="check">
-                <input type="checkbox" name="fidelidade" <?= $fidelidade ? 'checked' : '' ?>>
-                Pagamento com cartão fidelidade
-            </label>
+                <label class="check">
+                    <input type="checkbox" name="fidelidade" <?= $fidelidade ? 'checked' : '' ?>>
+                    Pagamento com cartão fidelidade
+                </label>
 
-            <button type="submit">Calcular</button>
-        </form>
+                <button type="submit">Calcular</button>
+                <a href="index.php" class="limpar">Limpar</a>
+            </form>
+        </section>
 
         <?php if ($resultado): ?>
-            <section class="resultado">
-                <h2>Resumo do pedido</h2>
-                <p><strong>Cliente:</strong> <?= htmlspecialchars($nome) ?></p>
-                <p><strong>Total do pedido:</strong> <?= brl($total) ?></p>
-                <p><strong>Desconto (<?= $resultado['percentual'] ?>%):</strong>
-                   - <?= brl($resultado['desconto']) ?></p>
-                <p class="final">Total a pagar: <?= brl($resultado['final']) ?></p>
-            </section>
+            <aside class="card painel">
+                <section class="resultado">
+                    <h2>Resumo do pedido</h2>
+                    <p><strong>Cliente:</strong> <?= htmlspecialchars($nome) ?></p>
+                    <p><strong>Total do pedido:</strong> <?= brl($total) ?></p>
+                    <p><strong>Desconto (<?= $resultado['percentual'] ?>%):</strong>
+                       - <?= brl($resultado['desconto']) ?></p>
+                    <p class="final">Total a pagar: <?= brl($resultado['final']) ?></p>
+                </section>
+
+                <section class="resultado">
+                    <h2>Parcelamento</h2>
+                    <table class="parcelas">
+                        <thead>
+                            <tr>
+                                <th>Parcelas</th>
+                                <th>for</th>
+                                <th>while</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($parcelasFor as $quantidade => $valor): ?>
+                                <tr>
+                                    <td><?= $quantidade ?>x</td>
+                                    <td><?= brl($valor) ?></td>
+                                    <td><?= brl($parcelasWhile[$quantidade]) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </aside>
         <?php endif; ?>
     </main>
 </body>

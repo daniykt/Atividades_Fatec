@@ -1,62 +1,611 @@
+/* ============================================
+   FARMÁCIA PARECETALOKA — Frutiger Aero
+   vidro brilhante, céu azul, grama verde,
+   bolhas d'água e botões glossy (era Vista/7)
+   ============================================ */
+
 * { box-sizing: border-box; }
 
+:root {
+    --sky-top: #2e9bf0;
+    --sky-mid: #8fd3ff;
+    --sky-low: #e4f7ff;
+    --grass: #5cc93b;
+    --grass-dark: #2f9a2a;
+    --aqua: #1fb6e8;
+    --blue-ink: #0b4f86;
+    --text: #1d3b55;
+    --muted: #4f7391;
+
+    --glass: rgba(255, 255, 255, 0.38);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0) 51%);
+
+    --font: 'Segoe UI', 'Frutiger', 'Myriad Pro', 'Trebuchet MS', sans-serif;
+
+    /* bolha d'água */
+    --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='b' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0' stop-color='%23cfeeff' stop-opacity='.08'/%3E%3Cstop offset='.75' stop-color='%23bfe8ff' stop-opacity='.18'/%3E%3Cstop offset='.95' stop-color='%23ffffff' stop-opacity='.75'/%3E%3Cstop offset='1' stop-color='%23ffffff' stop-opacity='.2'/%3E%3C/radialGradient%3E%3CradialGradient id='h' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0' stop-color='%23ffffff' stop-opacity='1'/%3E%3Cstop offset='1' stop-color='%23ffffff' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23b)'/%3E%3Cellipse cx='34' cy='30' rx='14' ry='10' fill='url(%23h)' transform='rotate(-35 34 30)'/%3E%3Cpath d='M70 82 A36 36 0 0 0 84 62' fill='none' stroke='%23ffffff' stroke-opacity='.6' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   ANIMAÇÕES
+   ============================================ */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-18px); }
+}
+@keyframes drift {
+    0%, 100% { transform: rotate(-8deg) translateX(0); }
+    50%      { transform: rotate(-6deg) translateX(30px); }
+}
+@keyframes appear {
+    from { opacity: 0; transform: translateY(16px) scale(.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes glint {
+    0%, 70% { left: -40%; }
+    100%    { left: 130%; }
+}
+
+/* ============================================
+   FUNDO: CÉU + SOL + GRAMA
+   ============================================ */
 body {
     margin: 0;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #e8f5ee;
-    padding: 16px;
+    padding: 48px 16px 120px;
+    font-family: var(--font);
+    color: var(--text);
+    background:
+        /* brilho do sol */
+        radial-gradient(circle at 82% 8%, rgba(255, 255, 255, 0.95) 0 40px, rgba(255, 255, 240, 0.5) 90px, transparent 260px),
+        /* colinas de grama */
+        radial-gradient(ellipse 70% 22% at 18% 100%, #8ee85d 0%, var(--grass) 55%, var(--grass-dark) 85%, transparent 86%),
+        radial-gradient(ellipse 80% 26% at 85% 104%, #a3f06f 0%, #6fd442 50%, #3ca832 84%, transparent 85%),
+        /* céu */
+        linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-low) 82%, #f6fff0 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
 }
 
-.card {
+/* bolhas flutuando */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        var(--bubble) 8% 18% / 90px 90px,
+        var(--bubble) 16% 62% / 46px 46px,
+        var(--bubble) 26% 34% / 28px 28px,
+        var(--bubble) 74% 26% / 60px 60px,
+        var(--bubble) 88% 52% / 110px 110px,
+        var(--bubble) 70% 74% / 36px 36px,
+        var(--bubble) 4% 82% / 64px 64px,
+        var(--bubble) 94% 86% / 30px 30px,
+        var(--bubble) 40% 10% / 22px 22px;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    animation: float 9s ease-in-out infinite;
+    z-index: 0;
+}
+
+/* faixa de luz curva (swoosh do Vista) */
+body::after {
+    content: "";
+    position: fixed;
+    left: -20%;
+    right: -20%;
+    top: 38%;
+    height: 60vh;
+    border-radius: 50%;
+    border-top: 40px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 -20px 60px -10px rgba(255, 255, 255, 0.45);
+    filter: blur(6px);
+    pointer-events: none;
+    animation: drift 14s ease-in-out infinite;
+    z-index: 0;
+}
+
+::selection {
+    background: var(--aqua);
+    color: #fff;
+}
+
+/* ============================================
+   LAYOUT: formulário + painel lado a lado
+   ============================================ */
+.layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 440px);
+    justify-content: center;
+    align-items: start;
+    gap: 28px;
     width: 100%;
-    max-width: 420px;
-    background: #fff;
-    padding: 28px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+    max-width: 940px;
 }
 
-h1 { margin: 0; color: #1b7f4b; font-size: 1.5rem; }
-.sub { margin: 4px 0 20px; color: #666; }
+/* quando há resultado, abre a segunda coluna */
+.layout:has(.painel) {
+    grid-template-columns: repeat(2, minmax(0, 440px));
+}
 
-label { display: block; margin: 14px 0 6px; font-weight: bold; font-size: .9rem; }
+/* ============================================
+   JANELA DE VIDRO (Aero Glass)
+   ============================================ */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    padding: 30px 30px 28px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.18) 38%, rgba(255, 255, 255, 0.28) 100%),
+        var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+        0 20px 50px rgba(8, 70, 130, 0.35),
+        0 2px 6px rgba(8, 70, 130, 0.2);
+    animation: appear .7s ease-out both;
+}
+
+/* reflexo diagonal no vidro */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(115deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 32%);
+    pointer-events: none;
+}
+
+/* bolha grande "presa" no canto da janela */
+.card::after {
+    content: "";
+    position: absolute;
+    top: -34px;
+    right: -30px;
+    width: 92px;
+    height: 92px;
+    background: var(--bubble) center / contain no-repeat;
+    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* ============================================
+   TÍTULO
+   ============================================ */
+h1 {
+    position: relative;
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--blue-ink);
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9),
+        0 0 18px rgba(255, 255, 255, 0.9);
+}
+
+/* ícone de folha + gota antes do nome */
+h1::before {
+    content: "";
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-right: 10px;
+    vertical-align: -6px;
+    border-radius: 50% 0 50% 50%;
+    transform: rotate(-45deg);
+    background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0 12%, transparent 40%),
+        linear-gradient(135deg, #b9f56b, var(--grass) 55%, var(--grass-dark));
+    box-shadow:
+        inset 0 -3px 6px rgba(0, 80, 0, 0.3),
+        0 3px 8px rgba(30, 120, 30, 0.35);
+}
+
+.sub {
+    position: relative;
+    margin: 6px 0 22px;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+/* ============================================
+   FORMULÁRIO
+   ============================================ */
+form {
+    position: relative;
+}
+
+label {
+    display: block;
+    margin: 16px 0 6px;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--text);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
 
 input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 11px 14px;
+    font-family: var(--font);
     font-size: 1rem;
+    color: var(--text);
+    background: linear-gradient(180deg, #eef7fd 0%, #ffffff 45%);
+    border: 1px solid #9cc4e2;
+    border-radius: 10px;
+    outline: none;
+    box-shadow:
+        inset 0 2px 4px rgba(20, 80, 140, 0.15),
+        0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: border-color .2s, box-shadow .2s;
 }
 
-.check { display: flex; align-items: center; gap: 8px; font-weight: normal; }
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover {
+    border-color: #5fb0e6;
+}
 
-button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-    border: 0;
-    border-radius: 6px;
-    background: #1b7f4b;
-    color: #fff;
-    font-size: 1rem;
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--aqua);
+    box-shadow:
+        inset 0 2px 4px rgba(20, 80, 140, 0.12),
+        0 0 0 3px rgba(31, 182, 232, 0.25),
+        0 0 14px rgba(31, 182, 232, 0.55);
+}
+
+/* select com botãozinho de vidro azul */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 52px;
     cursor: pointer;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1 L6 6 L11 1' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 13px center / 12px 8px no-repeat,
+        linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.15) 50%, transparent 51%) right 4px center / 32px calc(100% - 8px) no-repeat,
+        linear-gradient(180deg, #5cc8f5, #1784c9) right 4px center / 32px calc(100% - 8px) no-repeat,
+        linear-gradient(180deg, #eef7fd 0%, #ffffff 45%);
 }
-button:hover { background: #146339; }
 
-.resultado {
-    margin-top: 24px;
-    padding: 16px;
-    background: #f3faf6;
-    border-left: 4px solid #1b7f4b;
-    border-radius: 6px;
+/* checkbox do cartão fidelidade */
+.check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 12px 14px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 #fff, 0 2px 6px rgba(8, 70, 130, 0.12);
+    cursor: pointer;
+    transition: background .2s;
 }
-.resultado h2 { margin: 0 0 10px; font-size: 1.1rem; }
-.resultado p { margin: 6px 0; }
-.final { font-size: 1.2rem; font-weight: bold; color: #1b7f4b; }
+.check:hover {
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.check input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    border-radius: 50%;
+    border: 1px solid #8fb8d6;
+    background: linear-gradient(180deg, #ffffff, #dcecf7);
+    box-shadow: inset 0 1px 2px rgba(20, 80, 140, 0.2);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+.check input[type="checkbox"]::before {
+    content: "";
+    width: 7px;
+    height: 12px;
+    margin-top: -3px;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform .15s;
+}
+.check input[type="checkbox"]:checked {
+    border-color: #2f9a2a;
+    background:
+        var(--gloss),
+        radial-gradient(circle at 50% 100%, #b6f56e, #4cbd32 60%, #2f8f25);
+    box-shadow: 0 0 10px rgba(92, 201, 59, 0.6);
+}
+.check input[type="checkbox"]:checked::before {
+    transform: rotate(45deg) scale(1);
+}
+
+input:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--aqua);
+    outline-offset: 3px;
+}
+
+/* botão glossy verde-água */
+button {
+    position: relative;
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    font-family: var(--font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 60, 40, 0.5);
+    background:
+        var(--gloss),
+        radial-gradient(ellipse 90% 70% at 50% 110%, #9ff5c0 0%, transparent 60%),
+        linear-gradient(180deg, #3fd18a 0%, #17a86a 50%, #0c8f74 100%);
+    border: 1px solid #0b7a5c;
+    border-radius: 999px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -2px 6px rgba(0, 70, 50, 0.3),
+        0 6px 16px rgba(12, 143, 116, 0.45);
+    cursor: pointer;
+    overflow: hidden;
+    transition: filter .2s, transform .1s, box-shadow .2s;
+}
+
+/* brilho passando no botão */
+button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: skewX(-20deg);
+    animation: glint 4s ease-in-out infinite;
+}
+
+button:hover {
+    filter: brightness(1.08) saturate(1.1);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -2px 6px rgba(0, 70, 50, 0.3),
+        0 0 20px rgba(63, 209, 138, 0.7),
+        0 6px 16px rgba(12, 143, 116, 0.45);
+}
+button:active {
+    transform: translateY(1px);
+    filter: brightness(.95);
+}
+
+/* botão limpar: vidro azul claro */
+.limpar {
+    display: block;
+    margin-top: 12px;
+    padding: 11px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    color: var(--blue-ink);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    background:
+        var(--gloss),
+        linear-gradient(180deg, #e6f6ff 0%, #b9e3fb 100%);
+    border: 1px solid #8cc3e6;
+    border-radius: 999px;
+    box-shadow:
+        inset 0 1px 0 #fff,
+        0 4px 10px rgba(8, 70, 130, 0.18);
+    transition: filter .2s, transform .1s, box-shadow .2s;
+}
+.limpar:hover {
+    filter: brightness(1.05);
+    box-shadow:
+        inset 0 1px 0 #fff,
+        0 0 14px rgba(31, 182, 232, 0.5),
+        0 4px 10px rgba(8, 70, 130, 0.18);
+}
+.limpar:active {
+    transform: translateY(1px);
+}
+.limpar:focus-visible {
+    outline: 2px solid var(--aqua);
+    outline-offset: 3px;
+}
+
+/* ============================================
+   RESULTADO
+   ============================================ */
+.resultado {
+    position: relative;
+    margin-top: 26px;
+    padding: 18px 20px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(220, 245, 255, 0.45) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 14px;
+    box-shadow:
+        inset 0 1px 0 #fff,
+        0 4px 14px rgba(8, 70, 130, 0.15);
+    animation: appear .6s .15s ease-out both;
+}
+
+.resultado h2 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--blue-ink);
+}
+
+.resultado p {
+    margin: 7px 0;
+    color: var(--text);
+}
+.resultado strong {
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* total final em pílula verde brilhante */
+.final {
+    margin-top: 16px !important;
+    padding: 12px 18px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 60, 40, 0.45);
+    background:
+        var(--gloss),
+        linear-gradient(180deg, #7ee05a 0%, #3fb534 55%, #2b9628 100%);
+    border: 1px solid #2a8a25;
+    border-radius: 12px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 4px 12px rgba(47, 154, 42, 0.4);
+}
+
+/* ============================================
+   PAINEL DE RESULTADOS
+   ============================================ */
+.painel {
+    padding: 22px;
+    animation-delay: .15s;
+}
+.painel::after {
+    display: none;
+}
+.painel .resultado:first-child {
+    margin-top: 0;
+}
+.painel .resultado + .resultado {
+    margin-top: 18px;
+}
+
+/* tabela de parcelamento (for x while) */
+.parcelas {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: .95rem;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid #9cc4e2;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(8, 70, 130, 0.12);
+}
+
+.parcelas th {
+    padding: 9px 12px;
+    font-weight: 600;
+    text-align: left;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 50, 100, 0.5);
+    background:
+        var(--gloss),
+        linear-gradient(180deg, #5cc8f5, #1784c9);
+}
+
+.parcelas th,
+.parcelas td {
+    white-space: nowrap;
+}
+
+.parcelas td {
+    padding: 8px 12px;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(140, 195, 230, 0.35);
+    transition: background .15s;
+}
+.parcelas tbody tr:nth-child(even) td {
+    background: rgba(225, 244, 255, 0.7);
+}
+.parcelas tbody tr:hover td {
+    background: rgba(31, 182, 232, 0.16);
+}
+
+.parcelas th:not(:first-child),
+.parcelas td:not(:first-child) {
+    text-align: right;
+}
+.parcelas td:first-child {
+    font-weight: 700;
+    color: var(--blue-ink);
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+@media (max-width: 920px) {
+    .layout:has(.painel) {
+        grid-template-columns: minmax(0, 440px);
+    }
+    /* no celular o resultado aparece primeiro */
+    .painel {
+        order: -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 24px 20px 22px;
+    }
+    .card::after {
+        width: 64px;
+        height: 64px;
+        top: -24px;
+        right: -12px;
+    }
+    h1 {
+        font-size: 1.4rem;
+    }
+    h1::before {
+        width: 26px;
+        height: 26px;
+        vertical-align: -4px;
+    }
+    .final {
+        font-size: 1.05rem;
+    }
+    .painel {
+        padding: 14px;
+    }
+    .painel .resultado {
+        padding: 16px 14px;
+    }
+    .parcelas th,
+    .parcelas td {
+        padding: 8px 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

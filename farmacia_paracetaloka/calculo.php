@@ -9,6 +9,8 @@ const DESCONTO_FAIXA = [
 
 const DESCONTO_FIDELIDADE = 5; // Cartão fidelidade: mais 5%
 
+const MAX_PARCELAS = 6; // Parcelamento de 1x até 6x
+
 function calcularPedido(float $total, string $faixa, bool $fidelidade): array
 {
     $descontoFaixa = DESCONTO_FAIXA[$faixa] ?? 0;
@@ -23,4 +25,29 @@ function calcularPedido(float $total, string $faixa, bool $fidelidade): array
         'final'      => $total - $valorDesconto,
     ];
 }
-,
+
+// Parcelamento usando for
+function parcelarComFor(float $total): array
+{
+    $parcelas = [];
+
+    for ($quantidade = 1; $quantidade <= MAX_PARCELAS; $quantidade++) {
+        $parcelas[$quantidade] = $total / $quantidade;
+    }
+
+    return $parcelas;
+}
+
+// Parcelamento usando while
+function parcelarComWhile(float $total): array
+{
+    $parcelas = [];
+    $quantidade = 1;
+
+    while ($quantidade <= MAX_PARCELAS) {
+        $parcelas[$quantidade] = $total / $quantidade;
+        $quantidade++;
+    }
+
+    return $parcelas;
+}
