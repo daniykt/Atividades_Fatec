@@ -1,40 +1,24 @@
-# Aula 8 — Listas Dinâmicas & Arquitetura Modular
+# Atividades Fatec
 
-Atividade da disciplina **Programação para Dispositivos Móveis I** — FATEC Matão, semestre 2026/2.
-Professor: Diego Menegassi.
+Atividades de PHP feitas na disciplina de CI/CD. Cada pasta é um pequeno site independente.
 
-App Flutter de catálogo de produtos com arquitetura modular e renderização otimizada de listas via `ListView.builder`.
+## 📁 operações_aritmeticas
+Você digita dois números e o site mostra as contas: soma, subtração, multiplicação, divisão, resto e potência. Se o segundo número for zero, ele avisa que não dá para dividir.
 
-## Estrutura do projeto
+## 📁 farmacia_paracetaloka
+Calcula quanto o cliente vai pagar na farmácia. Você informa o nome, o valor da compra e a idade, e o desconto é aplicado sozinho:
+- de 51 a 69 anos: 5% de desconto
+- 70 anos ou mais: 7% de desconto
+- cartão fidelidade: mais 5%
 
-```
-lib/
-├── models/
-│   └── produto.dart              # Classe de dados imutável
-├── widgets/
-│   └── produto_card.dart         # Card reutilizável de item
-├── screens/
-│   ├── catalogo_screen.dart      # Tela principal com a lista
-│   └── detalhes_produto_screen.dart  # Tela de detalhes do produto
-└── main.dart                     # Configuração do MaterialApp
-```
+## 📁 tabuada
+Você digita um número e o site mostra a tabuada dele, de 0 a 9, com um visual de gatinhos 🐱.
 
-## O que foi implementado
-
-**Base do roteiro:**
-- Modelo `Produto` com atributos `final` e construtor `const`.
-- Widget `ProdutoCard` reutilizável usando `Card` + `ListTile` + `CircleAvatar`.
-- `CatalogoScreen` com `ListView.builder` para renderização sob demanda.
-- Material Design 3 com paleta gerada por `ColorScheme.fromSeed`.
-
-**Desafios:**
-- **Nível 1:** `FloatingActionButton` que adiciona novos produtos à lista com `setState()`.
-- **Nível 2:** `Dismissible` envolvendo cada card, permitindo remover itens com *swipe* da direita para a esquerda.
-- **Nível 3:** `DetalhesProdutoScreen` acessada ao tocar em um card, recebendo a instância de `Produto` via construtor.
-
-## Como executar
+## ▶️ Como rodar
+Precisa ter o PHP instalado. Abra o terminal dentro da pasta que quer testar e rode:
 
 ```bash
-flutter pub get
-flutter run
+php -S localhost:8000
 ```
+
+Depois é só abrir `http://localhost:8000` no navegador.
