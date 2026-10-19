@@ -37,3 +37,11 @@ Para rodar os testes do modelo:
 ```bash
 flutter test
 ```
+
+## Evidências
+
+### Detalhes com imagem e comentários
+![Detalhes com comentários](screenshots/01-detalhes-comentarios.png)
+
+### Notícia favoritada
+![Favoritada](screenshots/02-favoritado.png)

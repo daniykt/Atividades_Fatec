@@ -37,3 +37,14 @@ Para rodar os testes do modelo:
 ```bash
 flutter test
 ```
+
+## Evidências
+
+### Feed de notícias com busca
+![Feed](screenshots/01-feed-busca.png)
+
+### Erro de conexão (Nível Avançado)
+![Erro de conexão](screenshots/02-erro-conexao.png)
+
+### Tela de detalhes (Nível Intermediário)
+![Detalhes](screenshots/03-tela-detalhes.png)
