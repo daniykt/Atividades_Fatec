@@ -1,30 +1,43 @@
-# Atividades Fatec
+# Atividades FATEC — Programação para Dispositivos Móveis I
 
-Atividades de PHP feitas na disciplina de CI/CD. Cada pasta é um pequeno site independente.
+Repositório de atividades práticas da disciplina **Programação para Dispositivos Móveis I** (Flutter), ministrada pelo Prof. Diego Menegassi na FATEC Matão — 4º semestre de Desenvolvimento de Software Multiplataforma, 2026/2.
 
-## 📁 operações_aritmeticas
-Você digita dois números e o site mostra as contas: soma, subtração, multiplicação, divisão, resto e potência. Se o segundo número for zero, ele avisa que não dá para dividir.
+## Índice de atividades
 
-## 📁 farmacia_paracetaloka
-Calcula quanto o cliente vai pagar na farmácia. Você informa o nome, o valor da compra e a idade, e o desconto é aplicado sozinho:
-- de 51 a 69 anos: 5% de desconto
-- 70 anos ou mais: 7% de desconto
-- cartão fidelidade: mais 5%
+| Atividade | Tema | Conceitos principais |
+|-----------|------|----------------------|
+| [Atividade 07](./Atividade-07) | App de Checkout e Navegação | StatefulWidget, setState, Navigator.push/pop, passagem de parâmetros |
+| [Atividade 10](./Atividade-10) | Consumo de APIs, Listas e Exceções | http, jsonDecode, ListView.builder, try/catch/finally, estados de UI |
+| [Atividade 11](./Atividade-11) | Fluxo Lista-Detalhe (Master-Detail) | FutureBuilder, passagem de objetos entre telas, Hero animation, segunda chamada à API |
 
-### 🗓️ Atividade: Simulação de Parcelamento (01/10/2026)
-Feita na pasta `farmacia_paracetaloka`. Depois de calcular o total com desconto, o site mostra o valor dividido de **1x a 6x**.
-- O cálculo foi feito de duas formas, uma com `for` e outra com `while` (no arquivo `calculo.php`).
-- As duas versões aparecem lado a lado numa tabela, para comparar.
-- Também foi adicionado um botão **Limpar**, que apaga o formulário e o resultado.
+## Prévia das atividades
 
-## 📁 tabuada
-Você digita um número e o site mostra a tabuada dele, de 0 a 9, com um visual de gatinhos 🐱.
+### Atividade 10 — Feed de notícias com tratamento de erro
 
-## ▶️ Como rodar
-Precisa ter o PHP instalado. Abra o terminal dentro da pasta que quer testar e rode:
+<p align="center">
+  <img src="Atividade-10/screenshots/01-feed-busca.png" width="30%" alt="Feed com busca" />
+  <img src="Atividade-10/screenshots/02-erro-conexao.png" width="30%" alt="Erro de conexão" />
+  <img src="Atividade-10/screenshots/03-tela-detalhes.png" width="30%" alt="Tela de detalhes" />
+</p>
+
+### Atividade 11 — Fluxo Master-Detail com Hero e comentários
+
+<p align="center">
+  <img src="Atividade-11/screenshots/01-detalhes-comentarios.png" width="40%" alt="Detalhes com comentários" />
+  <img src="Atividade-11/screenshots/02-favoritado.png" width="40%" alt="Notícia favoritada" />
+</p>
+
+## Como executar qualquer atividade
 
 ```bash
-php -S localhost:8000
+cd Atividade-XX
+flutter pub get
+flutter run -d chrome
 ```
 
-Depois é só abrir `http://localhost:8000` no navegador.
+Requer Flutter SDK instalado. Testado com Flutter stable no Chrome.
+
+## Autor
+
+**Danilo da Silva Pereira** — [@daniykt](https://github.com/daniykt)
+FATEC Matão · DSM · 2025–2027
