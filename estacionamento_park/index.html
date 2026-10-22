@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estacionamento Park Fácil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="estrelas"></div>
+    <div class="planeta"></div>
+
+    <main class="painel">
+        <h1>🚀 Estacionamento Park Fácil</h1>
+        <p class="subtitulo">Estação espacial de estacionamento</p>
+
+        <form action="calcular.php" method="post">
+            <div class="campo">
+                <label for="horas">Horas:</label>
+                <input type="number" name="horas" id="horas" min="1" placeholder="Quantas horas?" required>
+            </div>
+
+            <div class="campo">
+                <span class="rotulo">Veículo:</span>
+                <div class="opcoes">
+                    <label class="opcao">
+                        <input type="radio" name="veiculo" value="carro" required>
+                        🚗 Carro
+                    </label>
+                    <label class="opcao">
+                        <input type="radio" name="veiculo" value="moto">
+                        🏍️ Moto
+                    </label>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label class="opcao">
+                    <input type="checkbox" name="lavagem" value="sim">
+                    🧽 Lavagem
+                </label>
+            </div>
+
+            <div class="botoes">
+                <input type="submit" value="Calcular">
+                <input type="reset" value="Limpar">
+            </div>
+        </form>
+    </main>
+</body>
+</html>

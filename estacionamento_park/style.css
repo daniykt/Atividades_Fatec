@@ -1,0 +1,242 @@
+/* ===== Tema: Espaço ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Exo+2:wght@400;600&display=swap');
+
+:root {
+    --fundo: #05060f;
+    --painel: rgba(20, 22, 50, 0.75);
+    --borda: rgba(140, 120, 255, 0.45);
+    --texto: #e6e8ff;
+    --texto-suave: #a3a8d6;
+    --neon-roxo: #a78bfa;
+    --neon-azul: #38bdf8;
+    --neon-rosa: #f472b6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    font-family: 'Exo 2', sans-serif;
+    color: var(--texto);
+    overflow-x: hidden;
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(124, 58, 237, 0.35), transparent 50%),
+        radial-gradient(ellipse at 85% 90%, rgba(14, 165, 233, 0.25), transparent 50%),
+        var(--fundo);
+}
+
+/* Estrelas feitas com vários pontinhos de gradiente */
+.estrelas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+        radial-gradient(1px 1px at 30% 70%, #fff, transparent),
+        radial-gradient(2px 2px at 50% 30%, #fff, transparent),
+        radial-gradient(1px 1px at 70% 80%, #fff, transparent),
+        radial-gradient(2px 2px at 90% 15%, #fff, transparent),
+        radial-gradient(1px 1px at 15% 90%, #fff, transparent),
+        radial-gradient(1px 1px at 60% 55%, #fff, transparent),
+        radial-gradient(2px 2px at 80% 45%, #cbd5ff, transparent),
+        radial-gradient(1px 1px at 40% 10%, #fff, transparent),
+        radial-gradient(1px 1px at 25% 45%, #fff, transparent);
+    background-size: 300px 300px;
+    animation: piscar 4s ease-in-out infinite alternate;
+}
+
+@keyframes piscar {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+}
+
+/* Planeta decorativo no canto */
+.planeta {
+    position: fixed;
+    width: 220px;
+    height: 220px;
+    right: -60px;
+    top: -60px;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #f9a8d4, #7c3aed 60%, #1e1b4b);
+    box-shadow: 0 0 60px rgba(167, 139, 250, 0.6);
+}
+
+.planeta::after {
+    content: "";
+    position: absolute;
+    width: 340px;
+    height: 60px;
+    left: -60px;
+    top: 80px;
+    border: 3px solid rgba(244, 114, 182, 0.6);
+    border-radius: 50%;
+    transform: rotate(-20deg);
+}
+
+/* Painel principal (a "nave") */
+.painel {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px 28px;
+    background: var(--painel);
+    border: 1px solid var(--borda);
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.35);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    background: linear-gradient(90deg, var(--neon-azul), var(--neon-roxo), var(--neon-rosa));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.subtitulo {
+    text-align: center;
+    color: var(--texto-suave);
+    margin: 6px 0 24px;
+    font-size: 0.95rem;
+}
+
+/* Campos do formulário */
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo > label,
+.rotulo {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--texto);
+    background: rgba(5, 6, 15, 0.6);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="number"]:focus {
+    border-color: var(--neon-azul);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+/* Opções de veículo e lavagem */
+.opcoes {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.opcao {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    background: rgba(5, 6, 15, 0.6);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.opcao:hover {
+    border-color: var(--neon-roxo);
+    box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+}
+
+.opcao input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--neon-roxo);
+    cursor: pointer;
+}
+
+/* Botões Calcular e Limpar */
+.botoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.botoes input {
+    flex: 1;
+    padding: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.botoes input[type="submit"] {
+    color: #fff;
+    border: none;
+    background: linear-gradient(90deg, #7c3aed, #0ea5e9);
+}
+
+.botoes input[type="reset"] {
+    color: var(--texto);
+    background: transparent;
+    border: 1px solid var(--neon-rosa);
+}
+
+.botoes input:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(167, 139, 250, 0.6);
+}
+
+/* Página de resultado (calcular.php) */
+.resultado p {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(140, 120, 255, 0.3);
+}
+
+.resultado .total {
+    margin-top: 12px;
+    border: none;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: var(--neon-azul);
+}
+
+.voltar {
+    display: block;
+    margin-top: 24px;
+    text-align: center;
+    color: var(--neon-roxo);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.voltar:hover {
+    color: var(--neon-rosa);
+}
