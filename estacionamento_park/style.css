@@ -1,16 +1,32 @@
-/* ===== Tema: Espaço ===== */
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Exo+2:wght@400;600&display=swap');
+/* =========================================================
+   ESTACIONAMENTO PARK FÁCIL
+   Estilo: Retrofuturismo + Missão Crítica
+   Um console de controle de missão dos anos 70:
+   estrutura técnica (grade, telemetria, cantoneiras, fonte mono)
+   com o calor retrô (planeta listrado, faixas, sombra chapada).
+   ========================================================= */
 
 :root {
-    --fundo: #05060f;
-    --painel: rgba(20, 22, 50, 0.75);
-    --borda: rgba(140, 120, 255, 0.45);
-    --texto: #e6e8ff;
-    --texto-suave: #a3a8d6;
-    --neon-roxo: #a78bfa;
-    --neon-azul: #38bdf8;
-    --neon-rosa: #f472b6;
+    /* Cores */
+    --espaco: #0d0a14;
+    --painel: #141019;
+    --painel-2: #1a1521;
+    --linha: rgba(244, 233, 216, 0.10);
+    --linha-forte: rgba(244, 233, 216, 0.24);
+    --creme: #f4e9d8;
+    --suave: #a69db3;
+    --laranja: #ff6b35;
+    --mostarda: #f7b538;
+    --rosa: #e8506a;
+    --turquesa: #2ec4b6;
+    --perigo: #ff6b6b;
+
+    /* Fontes */
+    --fonte-display: 'Righteous', system-ui, sans-serif;
+    --fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Curva de animação "com mola" */
+    --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 * {
@@ -22,221 +38,951 @@
 body {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 24px 16px;
-    font-family: 'Exo 2', sans-serif;
-    color: var(--texto);
+    padding: 0 16px 28px;
     overflow-x: hidden;
+    font-family: var(--fonte-mono);
+    color: var(--creme);
     background:
-        radial-gradient(ellipse at 20% 10%, rgba(124, 58, 237, 0.35), transparent 50%),
-        radial-gradient(ellipse at 85% 90%, rgba(14, 165, 233, 0.25), transparent 50%),
-        var(--fundo);
+        radial-gradient(1200px 600px at 85% 100%, rgba(232, 80, 106, 0.16), transparent 60%),
+        radial-gradient(900px 500px at 0% 0%, rgba(46, 196, 182, 0.07), transparent 60%),
+        var(--espaco);
 }
 
-/* Estrelas feitas com vários pontinhos de gradiente */
-.estrelas {
+/* Enquanto as animações de entrada não começam, esconde o que vai aparecer */
+.carregando .intro {
+    visibility: hidden;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* =========================================================
+   FUNDO: estrelas, órbitas, grade e efeito de tela antiga
+   ========================================================= */
+
+.estrelas,
+.orbitas,
+.grade,
+.crt {
     position: fixed;
     inset: 0;
-    z-index: -2;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.estrelas { z-index: -4; }
+.orbitas  { z-index: -3; }
+.grade    { z-index: -2; }
+.crt      { z-index: 100; }
+
+.grade {
     background-image:
-        radial-gradient(1px 1px at 10% 20%, #fff, transparent),
-        radial-gradient(1px 1px at 30% 70%, #fff, transparent),
-        radial-gradient(2px 2px at 50% 30%, #fff, transparent),
-        radial-gradient(1px 1px at 70% 80%, #fff, transparent),
-        radial-gradient(2px 2px at 90% 15%, #fff, transparent),
-        radial-gradient(1px 1px at 15% 90%, #fff, transparent),
-        radial-gradient(1px 1px at 60% 55%, #fff, transparent),
-        radial-gradient(2px 2px at 80% 45%, #cbd5ff, transparent),
-        radial-gradient(1px 1px at 40% 10%, #fff, transparent),
-        radial-gradient(1px 1px at 25% 45%, #fff, transparent);
-    background-size: 300px 300px;
-    animation: piscar 4s ease-in-out infinite alternate;
+        linear-gradient(var(--linha) 1px, transparent 1px),
+        linear-gradient(90deg, var(--linha) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.45;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 15%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 15%, transparent 70%);
 }
 
-@keyframes piscar {
-    from { opacity: 0.5; }
-    to   { opacity: 1; }
+/* Linhas horizontais e cantos escuros, como num monitor CRT */
+.crt {
+    background:
+        repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.45));
+    opacity: 0.5;
 }
 
-/* Planeta decorativo no canto */
-.planeta {
-    position: fixed;
-    width: 220px;
-    height: 220px;
-    right: -60px;
-    top: -60px;
-    z-index: -1;
+.planeta-svg {
+    filter: drop-shadow(0 0 60px rgba(255, 107, 53, 0.35));
+}
+
+.orbita {
+    fill: none;
+    stroke: rgba(244, 233, 216, 0.22);
+    stroke-width: 1.2;
+}
+
+.orbita--tracejada {
+    stroke: rgba(247, 181, 56, 0.35);
+    stroke-dasharray: 4 10;
+}
+
+.trajetoria {
+    fill: none;
+    stroke: rgba(255, 107, 53, 0.45);
+    stroke-width: 1.2;
+}
+
+.satelite {
+    fill: var(--mostarda);
+    filter: drop-shadow(0 0 6px var(--mostarda));
+}
+
+.farol-centro {
+    fill: var(--turquesa);
+}
+
+.farol-mira {
+    stroke: rgba(46, 196, 182, 0.5);
+    stroke-width: 1;
+}
+
+.pulso {
+    fill: none;
+    stroke: var(--turquesa);
+    stroke-width: 1;
+    opacity: 0;
+}
+
+/* =========================================================
+   TELEMETRIA (barra do topo)
+   ========================================================= */
+
+.telemetria {
+    width: 100%;
+    max-width: 1040px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px 20px;
+    padding: 16px 0;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+    border-bottom: 1px solid var(--linha);
+}
+
+.telemetria b {
+    font-weight: 500;
+    color: var(--creme);
+}
+
+.tel-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tel-relogio b {
+    font-variant-numeric: tabular-nums;
+}
+
+.led {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #f9a8d4, #7c3aed 60%, #1e1b4b);
-    box-shadow: 0 0 60px rgba(167, 139, 250, 0.6);
+    background: var(--turquesa);
+    box-shadow: 0 0 10px var(--turquesa);
+    animation: led 2s ease-in-out infinite;
 }
 
-.planeta::after {
+@keyframes led {
+    50% { opacity: 0.35; box-shadow: 0 0 2px var(--turquesa); }
+}
+
+/* =========================================================
+   CONSOLE (painel principal)
+   ========================================================= */
+
+.console {
+    position: relative;
+    width: 100%;
+    max-width: 1040px;
+    margin: auto 0;
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    background: linear-gradient(180deg, var(--painel-2), var(--painel));
+    border: 1px solid var(--linha-forte);
+    border-radius: 6px;
+    box-shadow:
+        0 40px 120px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+/* Espaço entre a telemetria e o console */
+.telemetria + .console {
+    margin-top: 36px;
+}
+
+/* Cantoneiras de "mira" nos 4 cantos */
+.console::after {
     content: "";
     position: absolute;
-    width: 340px;
-    height: 60px;
-    left: -60px;
-    top: 80px;
-    border: 3px solid rgba(244, 114, 182, 0.6);
-    border-radius: 50%;
-    transform: rotate(-20deg);
+    inset: -6px;
+    pointer-events: none;
+    --c: var(--creme);
+    background:
+        linear-gradient(var(--c), var(--c)) top left / 16px 2px,
+        linear-gradient(var(--c), var(--c)) top left / 2px 16px,
+        linear-gradient(var(--c), var(--c)) top right / 16px 2px,
+        linear-gradient(var(--c), var(--c)) top right / 2px 16px,
+        linear-gradient(var(--c), var(--c)) bottom left / 16px 2px,
+        linear-gradient(var(--c), var(--c)) bottom left / 2px 16px,
+        linear-gradient(var(--c), var(--c)) bottom right / 16px 2px,
+        linear-gradient(var(--c), var(--c)) bottom right / 2px 16px;
+    background-repeat: no-repeat;
+    opacity: 0.7;
 }
 
-/* Painel principal (a "nave") */
-.painel {
-    width: 100%;
-    max-width: 440px;
-    padding: 32px 28px;
-    background: var(--painel);
-    border: 1px solid var(--borda);
-    border-radius: 20px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 40px rgba(124, 58, 237, 0.35);
+/* Faixas retrô no topo do console */
+.console-faixa {
+    grid-column: 1 / -1;
+    height: 12px;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg,
+        var(--mostarda) 0 4px,
+        var(--laranja) 4px 8px,
+        var(--rosa) 8px 12px);
 }
 
-h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
-    text-align: center;
-    background: linear-gradient(90deg, var(--neon-azul), var(--neon-roxo), var(--neon-rosa));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.console-corpo {
+    padding: 40px 44px 44px;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.sobretitulo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.codigo {
+    padding: 3px 10px;
+    font-weight: 600;
+    color: var(--espaco);
+    background: var(--mostarda);
+    border-radius: 999px;
+}
+
+.titulo {
+    margin: 22px 0 14px;
+    font-weight: 400;
+}
+
+.titulo-sobre {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--fonte-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--laranja);
+}
+
+.titulo-nome {
+    display: block;
+    font-family: var(--fonte-display);
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    line-height: 1;
+    color: var(--creme);
+    text-shadow: 3px 3px 0 var(--laranja), 6px 6px 0 var(--rosa);
+    perspective: 400px;
+}
+
+.letra {
+    display: inline-block;
 }
 
 .subtitulo {
-    text-align: center;
-    color: var(--texto-suave);
-    margin: 6px 0 24px;
-    font-size: 0.95rem;
+    max-width: 44ch;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--suave);
 }
 
-/* Campos do formulário */
+/* ---------- Campos ---------- */
+
+#formulario {
+    margin-top: 8px;
+}
+
 .campo {
-    margin-bottom: 20px;
+    margin-top: 28px;
+    border: 0;
+    min-width: 0;
 }
 
-.campo > label,
 .rotulo {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-input[type="number"] {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 1rem;
-    font-family: inherit;
-    color: var(--texto);
-    background: rgba(5, 6, 15, 0.6);
-    border: 1px solid var(--borda);
-    border-radius: 10px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input[type="number"]:focus {
-    border-color: var(--neon-azul);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-}
-
-/* Opções de veículo e lavagem */
-.opcoes {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.opcao {
-    flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 14px;
-    cursor: pointer;
-    background: rgba(5, 6, 15, 0.6);
-    border: 1px solid var(--borda);
-    border-radius: 10px;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.num {
+    font-weight: 600;
+    color: var(--laranja);
+    font-variant-numeric: tabular-nums;
+}
+
+.num::after {
+    content: " /";
+    color: var(--linha-forte);
+}
+
+.ajuda {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: var(--suave);
+}
+
+.erro {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--perigo);
+}
+
+.erro:empty {
+    display: none;
+}
+
+/* Horas: campo com botões de - e + */
+.contador {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--linha-forte);
+    border-radius: 12px;
+    overflow: hidden;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.opcao:hover {
-    border-color: var(--neon-roxo);
-    box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+.js .contador {
+    grid-template-columns: 56px 1fr 56px;
 }
 
-.opcao input {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--neon-roxo);
+.contador:focus-within {
+    border-color: var(--mostarda);
+    box-shadow: 0 0 0 4px rgba(247, 181, 56, 0.14);
+}
+
+.contador input {
+    width: 100%;
+    padding: 14px 0;
+    font-family: var(--fonte-mono);
+    font-size: 1.7rem;
+    font-weight: 500;
+    text-align: center;
+    color: var(--creme);
+    background: transparent;
+    border: 0;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+}
+
+.contador input::-webkit-outer-spin-button,
+.contador input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.contador input::placeholder {
+    color: rgba(244, 233, 216, 0.25);
+}
+
+.contador-btn {
+    display: none;
+    font-family: var(--fonte-mono);
+    font-size: 1.4rem;
+    color: var(--creme);
+    background: transparent;
+    border: 0;
     cursor: pointer;
+    transition: background 0.15s, color 0.15s;
 }
 
-/* Botões Calcular e Limpar */
-.botoes {
+.js .contador-btn {
+    display: block;
+}
+
+.contador-btn:first-child { border-right: 1px solid var(--linha); }
+.contador-btn:last-child  { border-left: 1px solid var(--linha); }
+
+.contador-btn:hover {
+    color: var(--mostarda);
+    background: rgba(244, 233, 216, 0.05);
+}
+
+.contador-btn:active {
+    background: rgba(247, 181, 56, 0.12);
+}
+
+/* Veículo: dois cartões grandes (radio escondido por dentro) */
+.veiculos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.veiculo {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    padding: 18px 18px 16px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--linha-forte);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.25s, box-shadow 0.25s var(--mola);
+}
+
+.veiculo input,
+.interruptor input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.veiculo:hover {
+    border-color: rgba(244, 233, 216, 0.45);
+}
+
+.veiculo-classe {
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.veiculo-nome {
+    font-family: var(--fonte-display);
+    font-size: 1.65rem;
+    line-height: 1.2;
+}
+
+.veiculo-info {
+    font-size: 0.75rem;
+    color: var(--suave);
+}
+
+.veiculo-check {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    place-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--linha-forte);
+    border-radius: 50%;
+    transition: border-color 0.2s;
+}
+
+.veiculo-check::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mostarda);
+    transform: scale(0);
+    transition: transform 0.3s var(--mola);
+}
+
+.veiculo:has(input:checked) {
+    border-color: var(--mostarda);
+    background: linear-gradient(160deg, rgba(247, 181, 56, 0.14), rgba(255, 107, 53, 0.04));
+    box-shadow: 5px 5px 0 var(--laranja);
+}
+
+.veiculo:has(input:checked) .veiculo-check {
+    border-color: var(--mostarda);
+}
+
+.veiculo:has(input:checked) .veiculo-check::after {
+    transform: scale(1);
+}
+
+.veiculo:has(input:focus-visible) {
+    outline: 2px solid var(--mostarda);
+    outline-offset: 4px;
+}
+
+/* Lavagem: interruptor liga/desliga */
+.interruptor {
+    position: relative;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--linha-forte);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.interruptor:hover {
+    border-color: rgba(244, 233, 216, 0.45);
+}
+
+.interruptor-nome {
+    display: block;
+    font-family: var(--fonte-display);
+    font-size: 1.2rem;
+}
+
+.interruptor-info {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.75rem;
+    color: var(--suave);
+}
+
+.interruptor-trilho {
+    position: relative;
+    flex-shrink: 0;
+    width: 54px;
+    height: 30px;
+    background: rgba(244, 233, 216, 0.1);
+    border: 1px solid var(--linha-forte);
+    border-radius: 999px;
+    transition: background 0.25s, border-color 0.25s;
+}
+
+.interruptor-bola {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--creme);
+    transition: transform 0.35s var(--mola);
+}
+
+.interruptor:has(input:checked) {
+    border-color: var(--turquesa);
+}
+
+.interruptor:has(input:checked) .interruptor-trilho {
+    background: var(--turquesa);
+    border-color: var(--turquesa);
+}
+
+.interruptor:has(input:checked) .interruptor-bola {
+    transform: translateX(24px);
+}
+
+.interruptor:has(input:focus-visible) .interruptor-trilho {
+    outline: 2px solid var(--mostarda);
+    outline-offset: 3px;
+}
+
+/* Campo com erro */
+.campo.invalido .contador,
+.campo.invalido .veiculo {
+    border-color: var(--perigo);
+}
+
+/* ---------- Botões ---------- */
+
+.acoes {
+    display: flex;
+    gap: 14px;
+    margin-top: 36px;
+}
+
+.botao {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 28px;
+    overflow: hidden;
+    font-family: var(--fonte-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.18s var(--mola), box-shadow 0.18s var(--mola), background 0.2s, border-color 0.2s;
+}
+
+.botao:focus-visible {
+    outline: 2px solid var(--mostarda);
+    outline-offset: 4px;
+}
+
+.botao--principal {
+    flex: 1;
+    color: var(--espaco);
+    background: var(--laranja);
+    border: 0;
+    box-shadow: 5px 5px 0 var(--mostarda);
+}
+
+.botao--principal:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--mostarda);
+}
+
+.botao--principal:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--mostarda);
+}
+
+/* Quando o formulário está completo, o botão "acende" */
+.botao--principal.pronto {
+    background: linear-gradient(90deg, var(--laranja), #ff8550);
+}
+
+.botao-texto {
+    position: relative;
+    z-index: 1;
+}
+
+/* Barra que enche o botão durante o envio */
+.botao-progresso {
+    position: absolute;
+    inset: 0;
+    background: var(--mostarda);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.botao--fantasma {
+    color: var(--creme);
+    background: transparent;
+    border: 1px solid var(--linha-forte);
+}
+
+.botao--fantasma:hover {
+    border-color: var(--creme);
+    background: rgba(244, 233, 216, 0.05);
+}
+
+/* =========================================================
+   MANIFESTO (resumo ao lado do formulário)
+   ========================================================= */
+
+.manifesto {
+    padding: 40px 36px 44px;
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 1px solid var(--linha);
+}
+
+.manifesto-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.manifesto-titulo::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--laranja);
+}
+
+.lista-dados {
+    margin-top: 18px;
+}
+
+.lista-dados > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--linha-forte);
+}
+
+.lista-dados dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.lista-dados dd {
+    font-family: var(--fonte-display);
+    font-size: 1.3rem;
+    text-align: right;
+}
+
+.checklist {
+    margin-top: 30px;
+}
+
+.checklist-titulo {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.checklist ul {
+    margin-top: 12px;
+    list-style: none;
+}
+
+.checklist li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 0.82rem;
+    color: var(--suave);
+    transition: color 0.25s;
+}
+
+.checklist li::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--linha-forte);
+    border-radius: 3px;
+    transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.checklist li.ok {
+    color: var(--creme);
+}
+
+.checklist li.ok::before {
+    background: var(--turquesa);
+    border-color: var(--turquesa);
+    box-shadow: 0 0 10px rgba(46, 196, 182, 0.6);
+}
+
+.prontidao {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.prontidao-barra {
+    flex: 1;
+    height: 6px;
+    overflow: hidden;
+    background: rgba(244, 233, 216, 0.08);
+    border-radius: 999px;
+}
+
+.prontidao-barra span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--turquesa), var(--mostarda));
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+#prontidao-texto {
+    min-width: 4ch;
+    font-size: 0.75rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.manifesto-nota {
+    margin-top: 26px;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--suave);
+}
+
+/* =========================================================
+   RESULTADO (calcular.php)
+   ========================================================= */
+
+.console--relatorio {
+    grid-template-columns: 1fr;
+    max-width: 620px;
+}
+
+/* Texto que vem direto do PHP (aparece se o JavaScript não rodar) */
+.resultado {
+    margin-top: 28px;
+    padding: 24px;
+    font-family: var(--fonte-display);
+    font-size: 1.5rem;
+    line-height: 1.8;
+    border: 1px solid var(--linha-forte);
+    border-radius: 16px;
+}
+
+.resultado .voltar {
+    font-family: var(--fonte-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mostarda);
+    text-decoration: none;
+}
+
+.recibo {
+    position: relative;
+    margin-top: 28px;
+    padding: 28px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--linha-forte);
+    border-radius: 18px;
+    box-shadow: 6px 6px 0 var(--laranja);
+}
+
+.recibo[hidden] {
+    display: none;
+}
+
+.recibo-rotulo {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.recibo-total {
+    margin: 10px 0 18px;
+    font-family: var(--fonte-display);
+    font-size: clamp(2.8rem, 10vw, 4.4rem);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 3px 3px 0 var(--laranja), 6px 6px 0 var(--rosa);
+}
+
+.carimbo {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--turquesa);
+    border: 2px solid var(--turquesa);
+    border-radius: 6px;
+    transform: rotate(-8deg);
+}
+
+.recibo .acoes {
     margin-top: 28px;
 }
 
-.botoes input {
-    flex: 1;
-    padding: 12px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-}
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
 
-.botoes input[type="submit"] {
-    color: #fff;
-    border: none;
-    background: linear-gradient(90deg, #7c3aed, #0ea5e9);
-}
-
-.botoes input[type="reset"] {
-    color: var(--texto);
-    background: transparent;
-    border: 1px solid var(--neon-rosa);
-}
-
-.botoes input:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 16px rgba(167, 139, 250, 0.6);
-}
-
-/* Página de resultado (calcular.php) */
-.resultado p {
+.rodape {
+    width: 100%;
+    max-width: 1040px;
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px dashed rgba(140, 120, 255, 0.3);
+    gap: 16px;
+    margin-top: 28px;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--suave);
 }
 
-.resultado .total {
-    margin-top: 12px;
-    border: none;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    color: var(--neon-azul);
+/* =========================================================
+   TELAS MENORES
+   ========================================================= */
+
+@media (max-width: 860px) {
+    .console {
+        grid-template-columns: 1fr;
+    }
+
+    .console-corpo {
+        padding: 32px 24px 36px;
+    }
+
+    .manifesto {
+        padding: 28px 24px 32px;
+        border-left: 0;
+        border-top: 1px solid var(--linha);
+    }
+
+    /* No celular o planeta fica atrás do texto: deixa mais apagado */
+    .orbitas {
+        opacity: 0.45;
+    }
 }
 
-.voltar {
-    display: block;
-    margin-top: 24px;
-    text-align: center;
-    color: var(--neon-roxo);
-    text-decoration: none;
-    font-weight: 600;
+@media (max-width: 480px) {
+    .tel-rotulo {
+        display: none;
+    }
+
+    .telemetria + .console {
+        margin-top: 24px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    .botao--fantasma {
+        padding: 14px;
+    }
+
+    .veiculos {
+        gap: 10px;
+    }
+
+    .veiculo {
+        padding: 16px 14px 14px;
+    }
+
+    .veiculo-nome {
+        font-size: 1.4rem;
+    }
+
+    .carimbo {
+        top: 16px;
+        right: 16px;
+    }
+
+    .rodape {
+        flex-direction: column;
+        gap: 6px;
+    }
 }
 
-.voltar:hover {
-    color: var(--neon-rosa);
+/* Quem prefere menos movimento no sistema fica sem animações em CSS */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
 }

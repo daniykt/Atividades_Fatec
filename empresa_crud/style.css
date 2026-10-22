@@ -1,0 +1,18 @@
+body {
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.boas-vindas {
+    padding: 4rem 1rem;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}

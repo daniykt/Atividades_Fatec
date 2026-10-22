@@ -1,51 +1,186 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="carregando">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estacionamento Park Fácil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Avisa o CSS que o JavaScript está ligado.
+        // Por segurança, se algo der errado, mostra a página depois de 3 segundos.
+        document.documentElement.classList.add('js');
+        setTimeout(function () { document.documentElement.classList.remove('carregando'); }, 3000);
+    </script>
 </head>
 <body>
-    <div class="estrelas"></div>
-    <div class="planeta"></div>
+    <!-- ===== Fundo: estrelas, planeta, órbitas e efeito de tela antiga ===== -->
+    <canvas class="estrelas" id="estrelas" aria-hidden="true"></canvas>
+    <svg class="orbitas" viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
+        <defs>
+            <pattern id="listras" patternUnits="userSpaceOnUse" width="20" height="66">
+                <rect y="0" width="20" height="22" fill="#f7b538"/>
+                <rect y="22" width="20" height="22" fill="#ff6b35"/>
+                <rect y="44" width="20" height="22" fill="#e8506a"/>
+            </pattern>
+            <radialGradient id="sombra-planeta" cx="0.3" cy="0.3" r="0.85">
+                <stop offset="0" stop-color="#0d0a14" stop-opacity="0"/>
+                <stop offset="1" stop-color="#0d0a14" stop-opacity="0.6"/>
+            </radialGradient>
+            <mask id="fendas" maskUnits="userSpaceOnUse" x="1000" y="400" width="700" height="600">
+                <rect x="1000" y="400" width="700" height="600" fill="#fff"/>
+                <rect x="1000" y="760" width="700" height="12" fill="#000"/>
+                <rect x="1000" y="812" width="700" height="18" fill="#000"/>
+                <rect x="1000" y="866" width="700" height="26" fill="#000"/>
+            </mask>
+        </defs>
 
-    <main class="painel">
-        <h1>🚀 Estacionamento Park Fácil</h1>
-        <p class="subtitulo">Estação espacial de estacionamento</p>
+        <g class="planeta-svg">
+            <g mask="url(#fendas)">
+                <circle cx="1330" cy="720" r="230" fill="url(#listras)"/>
+                <circle cx="1330" cy="720" r="230" fill="url(#sombra-planeta)"/>
+            </g>
+        </g>
 
-        <form action="calcular.php" method="post">
-            <div class="campo">
-                <label for="horas">Horas:</label>
-                <input type="number" name="horas" id="horas" min="1" placeholder="Quantas horas?" required>
-            </div>
+        <g transform="rotate(-12 1330 720)">
+            <path class="orbita orbita--tracejada" d="M 670 720 A 660 170 0 1 1 1990 720 A 660 170 0 1 1 670 720"/>
+            <path class="orbita desenhar" id="caminho-satelite" d="M 860 720 A 470 110 0 1 1 1800 720 A 470 110 0 1 1 860 720"/>
+            <path class="orbita desenhar" d="M 990 720 A 340 74 0 1 1 1670 720 A 340 74 0 1 1 990 720"/>
+            <circle class="satelite" r="5"/>
+        </g>
 
-            <div class="campo">
-                <span class="rotulo">Veículo:</span>
-                <div class="opcoes">
-                    <label class="opcao">
-                        <input type="radio" name="veiculo" value="carro" required>
-                        🚗 Carro
+        <path class="trajetoria desenhar" d="M 528 186 C 820 170 1040 330 1180 560"/>
+
+        <g class="farol">
+            <path class="farol-mira" d="M 502 180 H 512 M 528 180 H 538 M 520 162 V 172 M 520 188 V 198"/>
+            <circle class="farol-centro" cx="520" cy="180" r="3"/>
+            <circle class="pulso" cx="520" cy="180" r="4"/>
+            <circle class="pulso" cx="520" cy="180" r="4"/>
+            <circle class="pulso" cx="520" cy="180" r="4"/>
+        </g>
+    </svg>
+    <div class="grade" aria-hidden="true"></div>
+    <div class="crt" aria-hidden="true"></div>
+
+    <!-- ===== Barra de telemetria ===== -->
+    <header class="telemetria intro">
+        <span class="tel-item"><span class="tel-rotulo">Estação</span> <b>PKF-01</b></span>
+        <span class="tel-item tel-relogio"><span class="tel-rotulo">Tempo de missão</span> <b id="relogio">T+00:00:00</b></span>
+        <span class="tel-item">
+            <span class="led" aria-hidden="true"></span>
+            <b id="status" data-ciclo="Sistemas nominais|Link estável|Órbita sincronizada|Hangar disponível">Sistemas nominais</b>
+        </span>
+    </header>
+
+    <!-- ===== Console principal ===== -->
+    <main class="console intro">
+        <div class="console-faixa" aria-hidden="true"></div>
+
+        <section class="console-corpo">
+            <p class="sobretitulo"><span class="codigo">PKF-01</span> Controle de estacionamento orbital</p>
+            <h1 class="titulo">
+                <span class="titulo-sobre">Estacionamento</span>
+                <span class="titulo-nome">Park Fácil</span>
+            </h1>
+            <p class="subtitulo">Informe os dados da sua nave para calcular a tarifa de permanência no hangar.</p>
+
+            <form action="calcular.php" method="post" id="formulario">
+                <!-- 01: Horas -->
+                <div class="campo">
+                    <label class="rotulo" for="horas"><span class="num">01</span>Horas</label>
+                    <div class="contador">
+                        <button type="button" class="contador-btn" data-passo="-1" aria-label="Diminuir uma hora">−</button>
+                        <input type="number" name="horas" id="horas" min="1" step="1" inputmode="numeric"
+                               placeholder="0" required aria-describedby="horas-ajuda horas-erro">
+                        <button type="button" class="contador-btn" data-passo="1" aria-label="Aumentar uma hora">+</button>
+                    </div>
+                    <p class="ajuda" id="horas-ajuda">Tempo total de permanência, em horas.</p>
+                    <p class="erro" id="horas-erro"></p>
+                </div>
+
+                <!-- 02: Veículo -->
+                <fieldset class="campo" aria-describedby="veiculo-erro">
+                    <legend class="rotulo"><span class="num">02</span>Veículo</legend>
+                    <div class="veiculos">
+                        <label class="veiculo">
+                            <input type="radio" name="veiculo" value="carro" required>
+                            <span class="veiculo-classe">Classe A</span>
+                            <span class="veiculo-nome">Carro</span>
+                            <span class="veiculo-info">4 rodas</span>
+                            <span class="veiculo-check" aria-hidden="true"></span>
+                        </label>
+                        <label class="veiculo">
+                            <input type="radio" name="veiculo" value="moto">
+                            <span class="veiculo-classe">Classe B</span>
+                            <span class="veiculo-nome">Moto</span>
+                            <span class="veiculo-info">2 rodas</span>
+                            <span class="veiculo-check" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                    <p class="erro" id="veiculo-erro"></p>
+                </fieldset>
+
+                <!-- 03: Lavagem -->
+                <div class="campo">
+                    <span class="rotulo"><span class="num">03</span>Adicional</span>
+                    <label class="interruptor">
+                        <span>
+                            <span class="interruptor-nome">Lavagem</span>
+                            <span class="interruptor-info" id="lavagem-info">Módulo de limpeza externa</span>
+                        </span>
+                        <input type="checkbox" name="lavagem" value="sim" role="switch">
+                        <span class="interruptor-trilho" aria-hidden="true"><span class="interruptor-bola"></span></span>
                     </label>
-                    <label class="opcao">
-                        <input type="radio" name="veiculo" value="moto">
-                        🏍️ Moto
-                    </label>
+                </div>
+
+                <div class="acoes">
+                    <button type="submit" class="botao botao--principal">
+                        <span class="botao-progresso" aria-hidden="true"></span>
+                        <span class="botao-texto">Calcular</span>
+                    </button>
+                    <button type="reset" class="botao botao--fantasma">Limpar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Resumo que atualiza enquanto a pessoa preenche -->
+        <aside class="manifesto" aria-labelledby="manifesto-titulo">
+            <h2 class="manifesto-titulo" id="manifesto-titulo">Manifesto de bordo</h2>
+            <dl class="lista-dados">
+                <div><dt>Horas</dt><dd id="m-horas">—</dd></div>
+                <div><dt>Veículo</dt><dd id="m-veiculo">—</dd></div>
+                <div><dt>Lavagem</dt><dd id="m-lavagem">Não</dd></div>
+            </dl>
+
+            <div class="checklist">
+                <p class="checklist-titulo">Checklist de pré-voo</p>
+                <ul>
+                    <li data-check="horas">Horas informadas</li>
+                    <li data-check="veiculo">Veículo selecionado</li>
+                </ul>
+                <div class="prontidao">
+                    <div class="prontidao-barra"><span id="prontidao-barra"></span></div>
+                    <span id="prontidao-texto">0%</span>
                 </div>
             </div>
 
-            <div class="campo">
-                <label class="opcao">
-                    <input type="checkbox" name="lavagem" value="sim">
-                    🧽 Lavagem
-                </label>
-            </div>
-
-            <div class="botoes">
-                <input type="submit" value="Calcular">
-                <input type="reset" value="Limpar">
-            </div>
-        </form>
+            <p class="manifesto-nota">O valor final é calculado pela central quando você confirmar.</p>
+        </aside>
     </main>
+
+    <footer class="rodape intro">
+        <span>Órbita baixa · Setor 7</span>
+        <span>Park Fácil · v2.0</span>
+    </footer>
+
+    <!-- ===== Bibliotecas de animação (open source) ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
