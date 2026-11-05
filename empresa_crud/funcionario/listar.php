@@ -1,13 +1,3 @@
-<?php
-    //montar o comando SQL
-    $sql = "select * from funcionario";
-
-    //conectar com o BD
-    require_once("../conexao.php");
-
-    //executar o comando
-    $resposta = mysqli_query($conexao, $sql);
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -34,26 +24,18 @@
                 <table class="table table-striped table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Telefone</th>
                             <th>Cargo</th>
                             <th>Salário</th>
-                            <th>Admissão</th>
-                            <th class="text-end">Ações</th>
+                            <th class="text-end">Operação</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while ($linha = mysqli_fetch_array($resposta)) { ?>
                             <tr>
-                                <td><?php echo $linha["id"]; ?></td>
                                 <td><?php echo $linha["nome"]; ?></td>
-                                <td><?php echo $linha["email"]; ?></td>
-                                <td><?php echo $linha["telefone"]; ?></td>
                                 <td><?php echo $linha["cargo"]; ?></td>
                                 <td><?php echo $linha["salario"]; ?></td>
-                                <td><?php echo $linha["data_admissao"]; ?></td>
                                 <td class="text-end text-nowrap">
                                     <a href="editar.php?id=<?php echo $linha["id"]; ?>" class="btn btn-sm btn-warning">Editar</a>
                                     <a href="remover.php?id=<?php echo $linha["id"]; ?>" class="btn btn-sm btn-danger"
@@ -70,3 +52,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?php
+    //montar o comando SQL
+    $sql = "select * from funcionario";
+
+    //conectar com o BD
+    require_once("../conexao.php");
+
+    //executar o comando
+    $resposta = mysqli_query($conexao, $sql);
+?>

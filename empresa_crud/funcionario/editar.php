@@ -1,17 +1,3 @@
-<?php
-    //pegar o id que veio pelo link
-    $id = $_GET["id"];
-
-    //montar o comando SQL
-    $sql = "select * from funcionario where id=$id";
-
-    //conectar com o BD
-    require_once("../conexao.php");
-
-    //executar o comando e pegar o funcionario
-    $resposta = mysqli_query($conexao, $sql);
-    $linha = mysqli_fetch_array($resposta);
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -78,3 +64,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?php
+    //pegar o id que veio pelo link
+    $id = $_GET["id"];
+
+    //montar o comando SQL
+    $sql = "select * from funcionario where id=$id";
+
+    //conectar com o BD
+    require_once("../conexao.php");
+
+    //executar o comando e pegar o funcionario
+    $resposta = mysqli_query($conexao, $sql);
+    $linha = mysqli_fetch_array($resposta);
+?>
