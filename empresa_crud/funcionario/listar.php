@@ -1,14 +1,12 @@
 <?php
-require '../conexao.php';
+    //montar o comando SQL
+    $sql = "select * from funcionario";
 
-$resultado = $conexao->query('SELECT * FROM funcionario ORDER BY nome');
+    //conectar com o BD
+    require_once("../conexao.php");
 
-$mensagens = [
-    'inserido'   => 'Funcionário cadastrado com sucesso!',
-    'atualizado' => 'Funcionário atualizado com sucesso!',
-    'removido'   => 'Funcionário removido com sucesso!',
-];
-$msg = $mensagens[$_GET['msg'] ?? ''] ?? null;
+    //executar o comando
+    $resposta = mysqli_query($conexao, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -32,52 +30,43 @@ $msg = $mensagens[$_GET['msg'] ?? ''] ?? null;
                 <a href="adicionar.php" class="btn btn-primary">+ Adicionar</a>
             </div>
 
-            <?php if ($msg): ?>
-                <div class="alert alert-success"><?= $msg ?></div>
-            <?php endif; ?>
-
-            <?php if ($resultado->num_rows === 0): ?>
-                <p class="text-muted mb-0">Nenhum funcionário cadastrado.</p>
-            <?php else: ?>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-light">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th>Cargo</th>
+                            <th>Salário</th>
+                            <th>Admissão</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($linha = mysqli_fetch_array($resposta)) { ?>
                             <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>E-mail</th>
-                                <th>Telefone</th>
-                                <th>Cargo</th>
-                                <th>Salário</th>
-                                <th>Admissão</th>
-                                <th class="text-end">Ações</th>
+                                <td><?php echo $linha["id"]; ?></td>
+                                <td><?php echo $linha["nome"]; ?></td>
+                                <td><?php echo $linha["email"]; ?></td>
+                                <td><?php echo $linha["telefone"]; ?></td>
+                                <td><?php echo $linha["cargo"]; ?></td>
+                                <td><?php echo $linha["salario"]; ?></td>
+                                <td><?php echo $linha["data_admissao"]; ?></td>
+                                <td class="text-end text-nowrap">
+                                    <a href="editar.php?id=<?php echo $linha["id"]; ?>" class="btn btn-sm btn-warning">Editar</a>
+                                    <a href="remover.php?id=<?php echo $linha["id"]; ?>" class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Deseja remover este funcionário?')">Remover</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($f = $resultado->fetch_assoc()): ?>
-                                <tr>
-                                    <td><?= $f['id'] ?></td>
-                                    <td><?= htmlspecialchars($f['nome']) ?></td>
-                                    <td><?= htmlspecialchars($f['email']) ?></td>
-                                    <td><?= htmlspecialchars($f['telefone']) ?></td>
-                                    <td><?= htmlspecialchars($f['cargo']) ?></td>
-                                    <td>R$ <?= number_format($f['salario'], 2, ',', '.') ?></td>
-                                    <td><?= date('d/m/Y', strtotime($f['data_admissao'])) ?></td>
-                                    <td class="text-end text-nowrap">
-                                        <a href="editar.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                        <a href="remover.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Deseja remover este funcionário?')">Remover</a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php $conexao->close(); ?>
