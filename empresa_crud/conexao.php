@@ -1,14 +1,16 @@
 <?php
-// Configuração padrão do MySQL no XAMPP
-$host  = 'localhost';
-$user  = 'root';
-$senha = '';
-$banco = 'empresa';
-
-$conexao = new mysqli($host, $user, $senha, $banco);
-
-if ($conexao->connect_error) {
-    die('Erro na conexão com o banco de dados: ' . $conexao->connect_error);
-}
-
-$conexao->set_charset('utf8mb4');
+    //este arquivo CONECTA com o BD MYSQL
+    //definir as variaveis
+    $servidor="localhost";
+    $usuario="root";
+    $senha="";
+    $bd="empresa";
+    //charmar o comando para CONECTAR
+    $conexao=mysqli_connect($servidor,$usuario,$senha,$bd);
+    if ($conexao){
+        echo "Conexao realizada com sucesso";
+    }
+    else{
+        echo mysqli_error($conexao);
+    }          
+?>
