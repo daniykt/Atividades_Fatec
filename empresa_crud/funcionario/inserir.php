@@ -1,27 +1,25 @@
 <?php
-require '../conexao.php';
+    //pegar os dados que vieram do formulario
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+    $telefone = $_POST["telefone"];
+    $cargo = $_POST["cargo"];
+    $salario = $_POST["salario"];
+    $data_admissao = $_POST["data_admissao"];
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: adicionar.php');
-    exit;
-}
+    //montar o comando SQL
+    $sql = "insert into funcionario(nome, email, telefone, cargo, salario, data_admissao)
+            values('$nome', '$email', '$telefone', '$cargo', '$salario', '$data_admissao')";
 
-$nome          = trim($_POST['nome'] ?? '');
-$email         = trim($_POST['email'] ?? '');
-$telefone      = trim($_POST['telefone'] ?? '');
-$cargo         = trim($_POST['cargo'] ?? '');
-$salario       = (float) str_replace(',', '.', $_POST['salario'] ?? '0');
-$data_admissao = $_POST['data_admissao'] ?? '';
+    //conectar com o BD
+    require_once("../conexao.php");
 
-$sql = 'INSERT INTO funcionario (nome, email, telefone, cargo, salario, data_admissao)
-        VALUES (?, ?, ?, ?, ?, ?)';
-
-$stmt = $conexao->prepare($sql);
-$stmt->bind_param('ssssds', $nome, $email, $telefone, $cargo, $salario, $data_admissao);
-$stmt->execute();
-
-$stmt->close();
-$conexao->close();
-
-header('Location: listar.php?msg=inserido');
-exit;
+    //executar o comando
+    $resposta = mysqli_query($conexao, $sql);
+    if ($resposta == true) {
+        header("location:listar.php");
+    }
+    else {
+        echo "Erro ao inserir: " . mysqli_error($conexao);
+    }
+?>
