@@ -6,14 +6,14 @@
     $sql = "delete from funcionario where id=$id";
 
     //conectar com o BD
-    require_once("../conexao.php");
+    include_once("../conexao.php");
+    $result=mysqli_query($conexao,$sql);
 
     //executar o comando
-    $resposta = mysqli_query($conexao, $sql);
-    if ($resposta == true) {
+    if ($result) {
         header("location:listar.php");
     }
     else {
-        echo "Erro ao remover: " . mysqli_error($conexao);
+         $mysqli_error($conexao);
     }
 ?>

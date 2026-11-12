@@ -14,14 +14,15 @@
             where id=$id";
 
     //conectar com o BD
-    require_once("../conexao.php");
-
-    //executar o comando
-    $resposta = mysqli_query($conexao, $sql);
-    if ($resposta == true) {
+    include_once("../conexao.php");
+    $result=mysqli_query($conexao,$sql);
+    if($result == true)
+    {
         header("location:listar.php");
     }
-    else {
-        echo "Erro ao atualizar: " . mysqli_error($conexao);
+    else
+    {
+        mysqli_errno($conexao);
     }
+
 ?>
