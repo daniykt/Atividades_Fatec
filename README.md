@@ -20,6 +20,15 @@ Feita na pasta `farmacia_paracetaloka`. Depois de calcular o total com desconto,
 ## 📁 tabuada
 Você digita um número e o site mostra a tabuada dele, de 0 a 9, com um visual de gatinhos 🐱.
 
+## 📁 empresa_crud
+Sistema para cadastrar os funcionários de uma empresa, ligado a um banco de dados MySQL. Dá para fazer as quatro operações básicas (CRUD):
+- **cadastrar** um funcionário novo
+- **listar** todos os funcionários cadastrados (`listar.php`)
+- **atualizar** os dados de um funcionário (`atualizar.php`)
+- **remover** um funcionário (`remover.php`)
+
+A conexão com o banco fica no arquivo `conexao.php` e usa `mysqli`. O banco exportado está no repositório para você importar e testar.
+
 ## ▶️ Como rodar
 Precisa ter o PHP instalado. Abra o terminal dentro da pasta que quer testar e rode:
 
@@ -28,3 +37,9 @@ php -S localhost:8000
 ```
 
 Depois é só abrir `http://localhost:8000` no navegador.
+
+### Para o `empresa_crud`
+Além do PHP, precisa do MySQL (o XAMPP já vem com os dois).
+1. Importe o arquivo `.sql` exportado no phpMyAdmin (ou no MySQL Workbench).
+2. Confira se o usuário, a senha e o nome do banco no `conexao.php` batem com os do seu MySQL.
+3. Rode o servidor dentro da pasta `empresa_crud`, como mostrado acima.
