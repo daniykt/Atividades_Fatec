@@ -9,6 +9,9 @@ Repositório de atividades práticas da disciplina **Programação para Disposit
 | [Atividade 07](./Atividade-07) | App de Checkout e Navegação | StatefulWidget, setState, Navigator.push/pop, passagem de parâmetros |
 | [Atividade 10](./Atividade-10) | Consumo de APIs, Listas e Exceções | http, jsonDecode, ListView.builder, try/catch/finally, estados de UI |
 | [Atividade 11](./Atividade-11) | Fluxo Lista-Detalhe (Master-Detail) | FutureBuilder, passagem de objetos entre telas, Hero animation, segunda chamada à API |
+| [Atividade 13](./Atividade-13) | Banco de dados local com SQLite | sqflite, CRUD, Singleton, toMap/fromMap |
+| [Atividade 14](./Atividade-14) | Geolocalização e GPS | geolocator, permissões, stream de posição, url_launcher |
+| [Atividade 15](./Atividade-15) | Câmera e galeria de mídia | image_picker, SharedPreferences, Hero, InteractiveViewer |
 
 ## Prévia das atividades
 
@@ -27,6 +30,19 @@ Repositório de atividades práticas da disciplina **Programação para Disposit
   <img src="Atividade-11/screenshots/02-favoritado.png" width="40%" alt="Notícia favoritada" />
 </p>
 
+### Atividade 14 — Check-in com GPS
+
+<p align="center">
+  <img src="Atividade-14/screenshots/01-gps.png" width="30%" alt="Check-in com GPS" />
+</p>
+
+### Atividade 15 — Perfil com câmera e galeria
+
+<p align="center">
+  <img src="Atividade-15/screenshots/01-sem-foto.png" width="22%" alt="Perfil sem foto" />
+  <img src="Atividade-15/screenshots/02-com-foto.png" width="22%" alt="Perfil com foto" />
+</p>
+
 ## Como executar qualquer atividade
 
 ```bash
@@ -36,6 +52,9 @@ flutter run -d chrome
 ```
 
 Requer Flutter SDK instalado. Testado com Flutter stable no Chrome.
+
+A Atividade 13 (SQLite) precisa de emulador ou dispositivo Android; não roda no Chrome.
+As Atividades 14 e 15 rodam no Chrome (a 15 usa bytes da imagem para funcionar na web) e também no Android.
 
 ## Autor
 
